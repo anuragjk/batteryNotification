@@ -1,0 +1,16 @@
+#!/bin/sh
+
+export XDG_RUNTIME_DIR="/run/user/1000"
+
+LEVEL=$(cat /sys/class/power_supply/BAT0/capacity)
+STATE=$(cat /sys/class/power_supply/BAT0/status)
+
+sleep 1
+if [ $STATE = "Discharging" ]
+then
+	if [ $LEVEL -lt 50 ]
+	then
+		/usr/bin/mpg123 /home/anuragjk/.extras/low_battery_sound.mp3
+	fi
+fi
+sleep 1
