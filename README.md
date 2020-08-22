@@ -1,4 +1,4 @@
-# lowBatteryNotification
+# batteryNotification
 Custom low battery notification for ubuntu 18.04
 
 run the installation script as follows
