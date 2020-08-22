@@ -2,15 +2,26 @@
 
 export XDG_RUNTIME_DIR="/run/user/1000"
 
+SCRIPT_NAME=$0
+SCRIPT_OPTION=$1
+
 LEVEL=$(cat /sys/class/power_supply/BAT0/capacity)
 STATE=$(cat /sys/class/power_supply/BAT0/status)
 
 sleep 1
 if [ $STATE = "Discharging" ]
 then
-	if [ $LEVEL -lt 50 ]
+	if [ $LEVEL -lt 15 ]
 	then
 		/usr/bin/mpg123 /home/anuragjk/.extras/low_battery_sound.mp3
+	fi
+fi
+
+if [ $STATE = "Charging" ]
+then
+	if [ $LEVEL = "100" ]
+	then
+		/usr/bin/mpg123 /home/anuragjk/.extras/full_battery.mp3
 	fi
 fi
 sleep 1
