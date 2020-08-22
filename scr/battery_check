@@ -13,7 +13,7 @@ if [ $STATE = "Discharging" ]
 then
 	if [ $LEVEL -lt 15 ]
 	then
-		/usr/bin/mpg123 /home/anuragjk/.extras/low_battery_sound.mp3
+		/usr/bin/mpg123 $HOME/.bcextras/sounds/low_battery_sound.mp3
 	fi
 fi
 
@@ -21,7 +21,7 @@ if [ $STATE = "Charging" ]
 then
 	if [ $LEVEL = "100" ]
 	then
-		/usr/bin/mpg123 /home/anuragjk/.extras/full_battery.mp3
+		/usr/bin/mpg123 $HOME/.bcextras/sounds/full_battery.mp3
 	fi
 fi
 sleep 1

@@ -1,0 +1,54 @@
+#!/bin/sh
+
+package_exists()
+{
+	dpkg -s "$1" > /dev/null 2>&1
+	return $?
+}
+
+CRON=$(crontab -l)
+ENTRY="* * * * * $HOME/.bcextras/battery_check #OK"
+
+echo "checking Kernel version"
+KERN_VER=$(uname -r | grep -oE '^\s*[0-9]+')
+if [ $KERN_VER -ge 4 ]
+then
+	echo "Kernel version \t\t[OK]"
+else
+	echo "Kernel should be greater that 4.0.0"
+	exit 1
+fi
+
+echo "Checking packages"
+if package_exists mpg123
+then
+	echo "mpg123\t\t\t[OK]"
+else
+	echo "\nPlease install mpg123 and try again"
+	echo "use \"apt-get install mpg123\""
+fi
+
+echo "$(crontab -l)" > .tmp_cron
+if  grep -q "$ENTRY" .tmp_cron
+then
+	echo "\nBattary notification is already installed."
+	exit 1
+fi
+
+echo "$ENTRY" >> .tmp_cron
+
+echo "Copying files..."
+mkdir -p $HOME/.bcextras
+cp scr/* $HOME/.bcextras/
+chmod +x $HOME/.bcextras/*
+mkdir -p $HOME/.bcextras/sounds
+cp media/*.mp3 $HOME/.bcextras/sounds/
+echo "done"
+
+echo "Setting crontab..."
+crontab .tmp_cron
+echo "done"
+
+rm .tmp_cron
+
+echo "Installation completed"
